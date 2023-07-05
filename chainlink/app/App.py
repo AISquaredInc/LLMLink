@@ -39,7 +39,7 @@ class App:
         return self._theme
     @theme.setter
     def theme(self, value):
-        if not isinstance(value, str):
+        if not isinstance(value, str) and value is not None:
             raise TypeError('theme must be str')
         self._theme = value
 

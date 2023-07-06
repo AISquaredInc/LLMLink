@@ -1,5 +1,5 @@
 from setuptools import setup
-from .chainlink import __version__
+from chainlink import __version__
 
 with open('requirements.txt', 'r') as f:
     requirements = [line for line in f.read().splitlines() if line]

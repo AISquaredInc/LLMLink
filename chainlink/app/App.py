@@ -1,5 +1,5 @@
-from .utils import binary_feedback_handler, correction_feedback_handler, submit_feedback, feedback
-from ..model import BaseModel
+from .utils import binary_feedback_handler, correction_feedback_handler, print_feedback, feedback, save_feedback_to_csv
+from chainlink.model import BaseModel
 import gradio as gr
 
 
@@ -15,7 +15,7 @@ class App:
         Whether to collect feedback within the app
     theme : str or None
         The gradio theme to use
-    feedback_callback : function (default submit_feedback)
+    feedback_callback : function (default print_feedback)
         Function to use when feedback is submitted
     """
 
@@ -24,7 +24,7 @@ class App:
             model,
             feedback=False,
             theme=None,
-            feedback_callback=submit_feedback
+            feedback_callback=print_feedback
     ):
         self.model = model
         self.feedback = feedback
@@ -37,8 +37,8 @@ class App:
 
     @model.setter
     def model(self, value):
-        if not isinstance(value, BaseModel):
-            raise TypeError('model must inheret from BaseModel class')
+    #    if not isinstance(value, BaseModel):
+    #        raise TypeError('model must inherit from BaseModel class')
         self._model = value
 
     @property

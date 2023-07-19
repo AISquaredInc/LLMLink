@@ -1,3 +1,5 @@
 transformers
 langchain
+openai
 gradio
+torch

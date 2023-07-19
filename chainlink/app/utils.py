@@ -32,14 +32,17 @@ def print_feedback():
     feedback['binary_feedback'] = None
     feedback['correction'] = None
 
-def save_feedback_to_csv(path = './feedback.csv'):
+
+def save_feedback_to_csv(path='./feedback.csv'):
     if feedback['user_msg'] is not None and feedback['bot_msg'] is not None:
         csv_exists = os.path.isfile(path)
         with open(path, 'a', newline='') as f:
             writer = csv.writer(f)
             if not csv_exists:
-                writer.writerow(['user_prompt', 'bot_response', 'binary_feedback', 'correction'])
-            writer.writerow([feedback['user_msg'], feedback['bot_msg'], feedback['binary_feedback'], feedback['correction']])
+                writer.writerow(['user_prompt', 'bot_response',
+                                'binary_feedback', 'correction'])
+            writer.writerow([feedback['user_msg'], feedback['bot_msg'],
+                            feedback['binary_feedback'], feedback['correction']])
 
     feedback['user_msg'] = None
     feedback['bot_msg'] = None

@@ -12,9 +12,12 @@ setup(
         'chainlink.app',
         'chainlink.model'
     ],
-    description = 'Chainlink is a Python package that allows users to easily create LLM-powered Gradio applications',
+    description='Chainlink is a Python package that allows users to easily create LLM-powered Gradio applications',
     long_description=open('README.md', 'r').read(),
-    author = 'Jacob Renn',
-    author_email = 'jacob.renn@squared.ai',
-    url = 'https://github.com/jacobrenn/chainlink.git'
+    author='Jacob Renn',
+    author_email='jacob.renn@squared.ai',
+    url='https://github.com/jacobrenn/chainlink.git',
+    license='Apache 2.0',
+    license_files='LICENSE',
+    install_requires=requirements
 )

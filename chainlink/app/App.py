@@ -37,8 +37,8 @@ class App:
 
     @model.setter
     def model(self, value):
-    #    if not isinstance(value, BaseModel):
-    #        raise TypeError('model must inherit from BaseModel class')
+        #    if not isinstance(value, BaseModel):
+        #        raise TypeError('model must inherit from BaseModel class')
         self._model = value
 
     @property

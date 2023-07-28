@@ -1,5 +1,5 @@
 from .utils import binary_feedback_handler, correction_feedback_handler, print_feedback, feedback, save_feedback_to_csv
-from chainlink.model import BaseModel
+from llmlink.model import BaseModel
 import gradio as gr
 
 

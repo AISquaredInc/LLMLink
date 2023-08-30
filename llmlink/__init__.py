@@ -4,7 +4,7 @@ standalone chat interfaces for LLMs. Our goal is to be able to provide an easy-t
 developers to deploy any LLM or chatbot application to an easy-to-use interface.
 """
 
-from .model import Model, BaseModel
+from .model import Model, Agent, BaseModel
 from .app import App, feedback
 
 __version__ = '0.0.2'

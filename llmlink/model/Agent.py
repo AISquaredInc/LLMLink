@@ -143,6 +143,7 @@ class Agent(BaseModel):
                 elif type_of_response == 'Final Answer':
                     final_answer = lines[idx].split(':')[1].strip()
                     return {'Action': 'answer', 'Answer': final_answer, 'Thought': '\n'.join(lines[:idx])}
+        return output + '\n' + 'Warning: No parsable action detected. Be sure to '
 
     def run(
             self,
@@ -170,7 +171,14 @@ class Agent(BaseModel):
 
         while True:
             response = self.llm(prompt)
+            
+            if self.verbose:
+                print(response)
+
             action = self.parse_output(response)
+
+            if self.verbose:
+                print(response)
 
             if action['Action'] == 'tool':
                 tool_response = self.run_tool(

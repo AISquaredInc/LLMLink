@@ -144,7 +144,7 @@ class Agent(BaseModel):
 
                     # Testing this one out
                     for action_idx in range(idx + 2, len(lines)):
-                        if lines[action_idx].startswith('Observation:'):
+                        if lines[action_idx].startswith('Observation:') or lines[action_idx].startswith('Question:'):
                             break
                         else:
                             tool_input += '\n' + lines[action_idx]

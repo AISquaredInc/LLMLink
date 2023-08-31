@@ -155,7 +155,7 @@ class Agent(BaseModel):
                 elif type_of_response == 'Final Answer':
                     final_answer = lines[idx].split(':')[1].strip()
                     if idx < len(lines):
-                        final_answer += '\n' + lines[idx + 1:]
+                        final_answer += '\n' + '\n'.join(lines[idx + 1:])
                     return {'Action': 'answer', 'Answer': final_answer, 'Thought': '\n'.join(lines[:idx])}
         return output + '\n' + 'Warning: No parsable action detected. Be sure to '
 

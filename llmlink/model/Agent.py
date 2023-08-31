@@ -143,7 +143,7 @@ class Agent(BaseModel):
                     tool_input = lines[idx + 1].split(':')[1].strip()
 
                     # Testing this one out
-                    for action_idx in range(idx + 1, len(lines)):
+                    for action_idx in range(idx + 2, len(lines)):
                         if lines[action_idx].startswith('Observation:'):
                             break
                         else:

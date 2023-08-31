@@ -179,7 +179,8 @@ class Agent(BaseModel):
         prompt = self.create_prompt(question)
 
         if self.verbose:
-            print('Initial prompt:')
+            print('INITIAL PROMPT:')
+            print('\n')
             print(prompt)
             print('\n\n')
 
@@ -187,14 +188,16 @@ class Agent(BaseModel):
             response = self.llm(prompt)
             
             if self.verbose:
-                print('Model response:')
+                print('MODEL RESPONSE:')
+                print('\n')
                 print(response)
                 print('\n\n')
 
             action = self.parse_output(response)
 
             if self.verbose:
-                print('Parsed action:')
+                print('PARSED ACTION:')
+                print('\n')
                 print(action)
                 print('\n\n')
 
@@ -209,7 +212,8 @@ class Agent(BaseModel):
                 prompt += f'{action["Thought"]}\nAction: {action["Tool"]}\nAction Input: {action["Input"]}\nObservation: {tool_response}\n'
 
                 if self.verbose:
-                    print('New prompt:')
+                    print('NEW PROMPT:')
+                    print('\n')
                     print(prompt)
                     print('\n\n')
 
@@ -217,7 +221,8 @@ class Agent(BaseModel):
                 prompt += f'{action["Thought"]}\nFinal Answer: {action["Answer"]}'
 
                 if self.verbose:
-                    print('Final text:')
+                    print('FINAL TEXT:')
+                    print('\n')
                     print(prompt)
                 return {
                     'response': action['Answer'],

@@ -167,18 +167,24 @@ class Agent(BaseModel):
         prompt = self.create_prompt(question)
 
         if self.verbose:
+            print('Initial prompt:')
             print(prompt)
+            print('\n\n')
 
         while True:
             response = self.llm(prompt)
             
             if self.verbose:
+                print('Model response:')
                 print(response)
+                print('\n\n')
 
             action = self.parse_output(response)
 
             if self.verbose:
+                print('Parsed action:')
                 print(action)
+                print('\n\n')
 
             if action['Action'] == 'tool':
                 tool_response = self.run_tool(
@@ -191,12 +197,15 @@ class Agent(BaseModel):
                 prompt += f'{action["Thought"]}\nAction: {action["Tool"]}\nAction Input: {action["Input"]}\nObservation: {tool_response}\n'
 
                 if self.verbose:
+                    print('New prompt:')
                     print(prompt)
+                    print('\n\n')
 
             elif action['Action'] == 'answer':
                 prompt += f'{action["Thought"]}\nFinal Answer: {action["Answer"]}'
 
                 if self.verbose:
+                    print('New prompt:')
                     print(prompt)
                 return {
                     'response': action['Answer'],

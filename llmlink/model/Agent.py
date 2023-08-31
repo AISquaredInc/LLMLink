@@ -113,7 +113,10 @@ class Agent(BaseModel):
         the_tool = self.tool_dict.get(tool_name)
 
         if the_tool:
-            return the_tool(tool_input)
+            try:
+                return the_tool(tool_input)
+            except Exception as e:
+                return(f'Tool encountered an error: {e}')
         else:
             return f'No tool with the name {tool_name} found'
 

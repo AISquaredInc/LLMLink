@@ -205,7 +205,7 @@ class Agent(BaseModel):
                 prompt += f'{action["Thought"]}\nFinal Answer: {action["Answer"]}'
 
                 if self.verbose:
-                    print('New prompt:')
+                    print('Final text:')
                     print(prompt)
                 return {
                     'response': action['Answer'],

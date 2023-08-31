@@ -178,7 +178,7 @@ class Agent(BaseModel):
             action = self.parse_output(response)
 
             if self.verbose:
-                print(response)
+                print(action)
 
             if action['Action'] == 'tool':
                 tool_response = self.run_tool(

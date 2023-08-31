@@ -141,6 +141,15 @@ class Agent(BaseModel):
                     if lines[idx + 1].split(':')[0].strip() != 'Action Input':
                         print('Possible problem parsing action input')
                     tool_input = lines[idx + 1].split(':')[1].strip()
+
+                    # Testing this one out
+                    for action_idx in range(idx + 1, len(lines)):
+                        if lines[action_idx].startswith('Observation:'):
+                            break
+                        else:
+                            tool_input += '\n' + lines[action_idx]
+
+                    
                     return {'Action': 'tool', 'Tool': tool, 'Input': tool_input, 'Thought': '\n'.join(lines[:idx])}
 
                 elif type_of_response == 'Final Answer':

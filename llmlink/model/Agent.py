@@ -133,7 +133,7 @@ class Agent(BaseModel):
                 type_of_response = lines[idx].split(':')[0].strip()
 
                 if type_of_response == 'Action':
-                    tool = lines[idx].split(':')[1].strip()
+                    tool = ':'.join(lines[idx].split(':')[1:]).strip()
 
                     if lines[idx + 1].split(':')[0].strip() != 'Action Input':
                         print('Possible problem parsing action input')

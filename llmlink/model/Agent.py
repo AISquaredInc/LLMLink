@@ -14,13 +14,14 @@ TOOL = 'tool'
 OBSERVATION = 'observation'
 
 RESPONSE_TYPES = {
-    'Thought' : THOUGHT,
-    'Action' : ACTION,
-    'Action Input' : INPUT,
-    'Final Answer' : ANSWER,
-    'Question' : QUESTION,
-    'Observation' : OBSERVATION
+    'Thought': THOUGHT,
+    'Action': ACTION,
+    'Action Input': INPUT,
+    'Final Answer': ANSWER,
+    'Question': QUESTION,
+    'Observation': OBSERVATION
 }
+
 
 class Agent(BaseModel):
     """
@@ -132,7 +133,7 @@ class Agent(BaseModel):
             try:
                 return the_tool(tool_input)
             except Exception as e:
-                return(f'Tool encountered an error: {e}')
+                return (f'Tool encountered an error: {e}')
         else:
             return f'No tool with the name {tool_name} found'
 
@@ -153,7 +154,8 @@ class Agent(BaseModel):
             if lines[idx].strip() == '':
                 continue
 
-            type_of_response = RESPONSE_TYPES.get(lines[idx].split(':')[0].strip())
+            type_of_response = RESPONSE_TYPES.get(
+                lines[idx].split(':')[0].strip())
 
             if type_of_response == THOUGHT:
                 current_type == THOUGHT
@@ -177,37 +179,8 @@ class Agent(BaseModel):
                     response[THOUGHT] = lines[idx].strip()
             elif type_of_response in [QUESTION, OBSERVATION]:
                 return response
-        
+
         return response
-
-
-
-        """ if ':' in lines[idx]:
-                type_of_response = lines[idx].split(':')[0].strip()
-
-                if type_of_response == 'Action':
-                    tool = ':'.join(lines[idx].split(':')[1:]).strip()
-
-                    if lines[idx + 1].split(':')[0].strip() != 'Action Input':
-                        print('Possible problem parsing action input')
-                    tool_input = lines[idx + 1].split(':')[1].strip()
-
-                    # Testing this one out
-                    for action_idx in range(idx + 2, len(lines)):
-                        if lines[action_idx].startswith('Observation:') or lines[action_idx].startswith('Question:'):
-                            break
-                        else:
-                            tool_input += '\n' + lines[action_idx]
-
-                    
-                    return {ACTION: TOOL, TOOL: tool, INPUT: tool_input, THOUGHT: '\n'.join(lines[:idx])}
-
-                elif type_of_response == ANSWER:
-                    final_answer = lines[idx].split(':')[1].strip()
-                    if idx < len(lines):
-                        final_answer += '\n' + '\n'.join(lines[idx + 1:])
-                    return {ACTION: 'answer', ANSWER: final_answer, THOUGHT: '\n'.join(lines[:idx])}
-        return output + '\n' + 'Warning: No parsable action detected. Be sure to ' """
 
     def run(
             self,
@@ -238,7 +211,7 @@ class Agent(BaseModel):
 
         while True:
             response = self.llm(prompt)
-            
+
             if self.verbose:
                 print('MODEL RESPONSE:')
                 print('\n')

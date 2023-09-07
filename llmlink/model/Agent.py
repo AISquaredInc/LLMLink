@@ -5,6 +5,22 @@ PREFIX = 'Answer the following question as best you can. You have access to the 
 SUFFIX = 'Begin\n\nQuestion: {question}\n'
 INSTRUCTIONS = 'Use the following format:\n\nQuestion: the input question you must answer\nThought: you should always think about what to do next\nAction: the action to take, should be one of {tool_names}\nAction Input: The input to the action\nObservation: the result of the action\n... (this Thought/Action/Action Input/Observation can repeat N times)\nThought: I now know the final answer\nFinal Answer: the final answer to the original input question'
 
+THOUGHT = 'thought'
+ACTION = 'action'
+INPUT = 'input'
+ANSWER = 'answer'
+QUESTION = 'question'
+TOOL = 'tool'
+OBSERVATION = 'observation'
+
+RESPONSE_TYPES = {
+    'Thought' : THOUGHT,
+    'Action' : ACTION,
+    'Action Input' : INPUT,
+    'Final Answer' : ANSWER,
+    'Question' : QUESTION,
+    'Observation' : OBSERVATION
+}
 
 class Agent(BaseModel):
     """
@@ -129,10 +145,40 @@ class Agent(BaseModel):
         """
 
         lines = output.splitlines()
+        response = {}
+        current_type = None
 
         for idx in range(len(lines)):
 
-            if ':' in lines[idx]:
+            if lines[idx].strip() == '':
+                continue
+
+            type_of_response = RESPONSE_TYPES.get(lines[idx].split(':')[0].strip())
+
+            if type_of_response == THOUGHT:
+                current_type == THOUGHT
+                response[THOUGHT] = lines[idx].split(':')[1].strip()
+            elif type_of_response == ACTION:
+                current_type = ACTION
+                response[ACTION] = TOOL
+                response[TOOL] = ':'.join(lines[idx].split(':')[1:]).strip()
+            elif type_of_response == INPUT:
+                current_type = INPUT
+                response[INPUT] = ':'.join(lines[idx].split(':')[1:]).strip()
+            elif type_of_response == ANSWER:
+                current_type = ANSWER
+                response[ACTION] = ANSWER
+                response[ANSWER] = ':'.join(lines[idx].split(':')[1:]).strip()
+            elif type_of_response is None:
+                response[current_type] += '\n' + lines[idx]
+            elif type_of_response in [QUESTION, OBSERVATION]:
+                return response
+        
+        return response
+
+
+
+        """ if ':' in lines[idx]:
                 type_of_response = lines[idx].split(':')[0].strip()
 
                 if type_of_response == 'Action':
@@ -150,14 +196,14 @@ class Agent(BaseModel):
                             tool_input += '\n' + lines[action_idx]
 
                     
-                    return {'Action': 'tool', 'Tool': tool, 'Input': tool_input, 'Thought': '\n'.join(lines[:idx])}
+                    return {ACTION: TOOL, TOOL: tool, INPUT: tool_input, THOUGHT: '\n'.join(lines[:idx])}
 
-                elif type_of_response == 'Final Answer':
+                elif type_of_response == ANSWER:
                     final_answer = lines[idx].split(':')[1].strip()
                     if idx < len(lines):
                         final_answer += '\n' + '\n'.join(lines[idx + 1:])
-                    return {'Action': 'answer', 'Answer': final_answer, 'Thought': '\n'.join(lines[:idx])}
-        return output + '\n' + 'Warning: No parsable action detected. Be sure to '
+                    return {ACTION: 'answer', ANSWER: final_answer, THOUGHT: '\n'.join(lines[:idx])}
+        return output + '\n' + 'Warning: No parsable action detected. Be sure to ' """
 
     def run(
             self,
@@ -203,15 +249,15 @@ class Agent(BaseModel):
                 print(action)
                 print('\n\n')
 
-            if action['Action'] == 'tool':
+            if action[ACTION] == TOOL:
                 tool_response = self.run_tool(
-                    action['Tool'],
-                    action['Input']
+                    action[TOOL],
+                    action[INPUT]
                 )
 
                 if tool_response == '':
                     tool_response = 'Tool returned no results'
-                prompt += f'{action["Thought"]}\nAction: {action["Tool"]}\nAction Input: {action["Input"]}\nObservation: {tool_response}\n'
+                prompt += f'{action[THOUGHT]}\nAction: {action[TOOL]}\nAction Input: {action[INPUT]}\nObservation: {tool_response}\n'
 
                 if self.verbose:
                     print('NEW PROMPT:')
@@ -219,14 +265,14 @@ class Agent(BaseModel):
                     print(prompt)
                     print('\n\n')
 
-            elif action['Action'] == 'answer':
-                prompt += f'{action["Thought"]}\nFinal Answer: {action["Answer"]}'
+            elif action[ACTION] == ANSWER:
+                prompt += f'{action[THOUGHT]}\nFinal Answer: {action[ANSWER]}'
 
                 if self.verbose:
                     print('FINAL TEXT:')
                     print('\n')
                     print(prompt)
                 return {
-                    'response': action['Answer'],
+                    'response': action[ANSWER],
                     'full_text': prompt
                 }

@@ -157,7 +157,7 @@ class Agent(BaseModel):
 
             if type_of_response == THOUGHT:
                 current_type == THOUGHT
-                response[THOUGHT] = lines[idx].split(':')[1].strip()
+                response[THOUGHT] = ':'.join(lines[idx].split(':')[1:]).strip()
             elif type_of_response == ACTION:
                 current_type = ACTION
                 response[ACTION] = TOOL
@@ -170,7 +170,11 @@ class Agent(BaseModel):
                 response[ACTION] = ANSWER
                 response[ANSWER] = ':'.join(lines[idx].split(':')[1:]).strip()
             elif type_of_response is None:
-                response[current_type] += '\n' + lines[idx]
+                if current_type:
+                    response[current_type] += '\n' + lines[idx]
+                else:
+                    type_of_response = THOUGHT
+                    response[THOUGHT] = lines[idx].strip()
             elif type_of_response in [QUESTION, OBSERVATION]:
                 return response
         
@@ -249,7 +253,7 @@ class Agent(BaseModel):
                 print(action)
                 print('\n\n')
 
-            if action[ACTION] == TOOL:
+            if action.get(ACTION) == TOOL:
                 tool_response = self.run_tool(
                     action[TOOL],
                     action[INPUT]
@@ -257,7 +261,7 @@ class Agent(BaseModel):
 
                 if tool_response == '':
                     tool_response = 'Tool returned no results'
-                prompt += f'{action[THOUGHT]}\nAction: {action[TOOL]}\nAction Input: {action[INPUT]}\nObservation: {tool_response}\n'
+                prompt += f'Thought: {action[THOUGHT]}\nAction: {action[TOOL]}\nAction Input: {action[INPUT]}\nObservation: {tool_response}\n'
 
                 if self.verbose:
                     print('NEW PROMPT:')
@@ -265,8 +269,11 @@ class Agent(BaseModel):
                     print(prompt)
                     print('\n\n')
 
-            elif action[ACTION] == ANSWER:
-                prompt += f'{action[THOUGHT]}\nFinal Answer: {action[ANSWER]}'
+            elif action.get(ACTION) == ANSWER:
+                if action.get(THOUGHT):
+                    prompt += f'Thought: {action[THOUGHT]}\nFinal Answer: {action[ANSWER]}'
+                else:
+                    prompt += f'Final Answer: {action[ANSWER]}'
 
                 if self.verbose:
                     print('FINAL TEXT:')
@@ -276,3 +283,5 @@ class Agent(BaseModel):
                     'response': action[ANSWER],
                     'full_text': prompt
                 }
+            elif action.get(ACTION) is None:
+                prompt += f'{response}\n\nWARNING: No parsable action detected - be sure to utilize the format provided'

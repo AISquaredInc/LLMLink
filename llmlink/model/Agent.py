@@ -234,7 +234,10 @@ class Agent(BaseModel):
 
                 if tool_response == '':
                     tool_response = 'Tool returned no results'
-                prompt += f'Thought: {action[THOUGHT]}\nAction: {action[TOOL]}\nAction Input: {action[INPUT]}\nObservation: {tool_response}\n'
+                if action.get(THOUGHT):
+                    prompt += f'Thought: {action[THOUGHT]}\nAction: {action[TOOL]}\nAction Input: {action[INPUT]}\nObservation: {tool_response}\n'
+                else:
+                    prompt += f'Action: {action[TOOL]}\nAction Input: {action[INPUT]}\nObservation: {tool_response}\n'
 
                 if self.verbose:
                     print('NEW PROMPT:')

@@ -7,4 +7,4 @@ developers to deploy any LLM or chatbot application to an easy-to-use interface.
 from .model import Model, Agent, BaseModel
 from .app import App, feedback
 
-__version__ = '0.0.3'
+__version__ = '0.0.4'

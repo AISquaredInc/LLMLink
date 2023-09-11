@@ -144,7 +144,7 @@ class Agent(BaseModel):
 
         if the_tool:
             try:
-                return the_tool(tool_input)
+                return the_tool(tool_input).strip()
             except Exception as e:
                 return (f'Tool encountered an error: {e}')
         else:
@@ -228,7 +228,7 @@ class Agent(BaseModel):
             print('\n\n')
 
         while True:
-            response = self.llm(prompt)
+            response = self.llm(prompt).strip()
 
             if self.verbose:
                 print('MODEL RESPONSE:')

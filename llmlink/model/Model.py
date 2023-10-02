@@ -1,3 +1,4 @@
+from typing import Any
 from langchain.agents import initialize_agent, ZeroShotAgent, AgentExecutor
 from langchain import OpenAI, LLMChain, HuggingFacePipeline, PromptTemplate
 from langchain.memory import ConversationBufferMemory
@@ -55,6 +56,9 @@ class Model(BaseModel):
         self.openai_api_key = openai_api_key
 
         self._agent = self._initialize_model()
+
+    def __call__(self, text):
+        return self.run(text)
 
     def _initialize_model(self):
         """

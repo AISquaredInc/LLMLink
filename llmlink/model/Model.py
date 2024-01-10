@@ -9,7 +9,7 @@ from .BaseModel import BaseModel
 
 class Model(BaseModel):
     """
-    A Model class to be used with applications in Chainlink
+    A Model class to be used with applications in LLMLink
 
     Parameters
     ----------

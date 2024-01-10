@@ -17,7 +17,7 @@ setup(
     long_description_content_type='text/markdown',
     author='Jacob Renn',
     author_email='jacob.renn@squared.ai',
-    url='https://github.com/jacobrenn/chainlink.git',
+    url='https://github.com/jacobrenn/llmlink.git',
     license='Apache 2.0',
     license_files='LICENSE',
     install_requires=requirements
